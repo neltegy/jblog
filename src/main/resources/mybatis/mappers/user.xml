@@ -11,16 +11,28 @@
 		]]>
 	</select><!-- 안에 if문이 있을때 String 형 하나만 받을시에 _parameter -->
 	
-	
-	<select id="selectUserByEmailPW" parameterType="map" resultType="com.javaex.vo.UserVo">
+	<insert id="insertUserVo" parameterType="UserVo">
 		<![CDATA[
-			select no
-			      ,name
+			insert into users
+			values(seq_users_no.nextval
+			      ,#{id}
+			      ,#{userName}
+			      ,#{password}
+			      ,sysdate
+			)
+		]]>
+	</insert>
+	
+	<select id="selectUserVoByIdPassword" parameterType="UserVo" resultType="UserVo">
+		<![CDATA[
+			select userNo
+			      ,id
 			from users
-			where email = #{email}
+			where id = #{id}
 			  and password = #{password}
 		]]>
 	</select>
+	
 	
 	<insert id="insertUser" parameterType="com.javaex.vo.UserVo">
 		<![CDATA[

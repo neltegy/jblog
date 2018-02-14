@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<%-- <link href="${pageContext.request.contextPath }/assets/css/guestbook.css" rel="stylesheet" type="text/css"> --%>
+<link href="${pageContext.request.contextPath }/assets/css/jblog.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath }/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 	
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.12.4.js"></script>
@@ -18,23 +18,11 @@
 	<div class="center-content">
 		
 		<!-- 메인해더 -->
-		<a href="">
-			<img class="logo" src="/jblog/assets/images/logo.jpg">
-		</a>
-		<ul class="menu">
-			
-			<!-- 로그인 전 메뉴 -->
-			<li><a href="">로그인</a></li>
-			<li><a href="">회원가입</a></li>
-		
-			<!-- 로그인 후 메뉴 -->
-			<!-- <li><a href="">로그아웃</a></li>
-			<li><a href="">내블로그</a></li> -->
-				
- 		</ul>
+			<c:import url="/WEB-INF/views/includes/header.jsp"></c:import>
  		<!-- /메인해더 -->
  		
-		<form class="join-form" id="join-form" method="post" action="${pageContext.request.contextPath}/user/join">
+		<form class="join-form" id="join-form" method="post" action="${pageContext.request.contextPath}/user/joinexecution">
+		
 			<label class="block-label" for="name">이름</label>
 			<input type="text" name="userName"  value="" />
 			
@@ -55,6 +43,8 @@
 			</fieldset>
 
 			<input type="submit" value="가입하기">
+			<!-- <input type="button" value="가입하기" id="Btn_join"> -->
+			<!-- <input type="button" value="가입하기" id="Btn_join"> -->
 
 		</form>
 	</div>
@@ -69,8 +59,9 @@
 				</div>
 				<div class="modal-body">
 					<h4 id="possible"></h4>
-					<label>아이디</label>
-					<input type="text" name="modalId" id="modalId"><br>	
+					<!-- <label>아이디</label> -->
+					<h3 name="modalId" id="modalId"></h3><br>
+					<!-- <input type="text" name="modalId" id="modalId"><br> -->	
 					<!-- <h1 id="login_process"></h1> -->
 				</div>
 				<div class="modal-footer">
@@ -85,19 +76,69 @@
 </body>
 <script type="text/javascript">
 var id;
+var userName;
+var password;
+var agree;
 
-$("#btn-checkid").on("click",function(){
+$("[type=submit]").on("click",function(){ //가입하기 눌렀을때
+	event.preventDefault();
+	
+	/* 메롱이닷 */
+	
+	/* $("#join-form").on("submit",function(){
+		console.log("aaa");
+	}); */
 	id = $("[name=id]").val();
+	userName = $("[name=userName]").val()
+	password = $("[name=password]").val()
+	agree = $("#agree-prov").is(":checked")
 	console.log("id:"+id);
-	$("#modalId").val(id);
+	console.log("userName:"+userName);
+	console.log("password:"+password);
+	console.log("agree:"+agree);
 	
-	conajax();
+	if(!id || !userName || !password || !agree){
+		console.log("하나이상 비어있습니다.");
+		
+		$("#possible").text("")
+		$("#modalId").text("하나이상 비어있습니다.");
+		$("#btn_use").css("display","none");
+		
+		$("#del-pop").modal();
+	}else{
+		console.log("꽉찼습니다.");
+		
+		console.log($("#join-form").trigger("submit"));
+	}
 	
 	
+});
+
+
+$("#btn-checkid").on("click",function(){ // id 중복체크 눌렀을때
+	id = $("[name=id]").val();
 	
-	/* #possible 사용 가능한 아이디입니다. */
+	if( id=="" || id==null || id==undefined || (id!=null && typeof id=="object" && !Object.keys(id).length)){
+		$("#possible").text("")
+		$("#modalId").text("아이디를 입력해주세요.");
+		$("#btn_use").css("display","none");
+		$("#del-pop").modal();
+		
+	}else{
+		$("#modalId").text(id);
+		$("#btn_use").css("display","inline");
+		conajax();
+		$("#del-pop").modal();
+	}
+
+});
+
+$("#btn_use").on("click",function(){ //사용하기 버튼 눌렀을때
+	$("#del-pop").modal("hide");
 	
-	$("#del-pop").modal();
+	$("#img-checkid").css("display","inline");
+	
+	$("[name=password]").selectRange(1,1);
 });
 
 function conajax(){
@@ -111,11 +152,11 @@ function conajax(){
 		dataType : "json",
 		success : function(fail){
 			/*성공시 처리해야될 코드 작성*/
-			console.log(fail);
-			console.log("success");
-			
 			if(fail == 0){
 				$("#possible").text("사용 가능한 아이디입니다.").css("color","blue");
+			}else{
+				$("#btn_use").css("display","none");
+				$("#possible").text("사용 불가능한 아이디입니다.").css("color","red");
 			}
 			
 			/* for(var i = 0 ; i < guestbooklist.length; i++){
@@ -130,5 +171,20 @@ function conajax(){
 	});
 };
 
+
+$.fn.selectRange = function(start, end) {
+	return this.each(function() {
+		if(this.setSelectionRange) {
+			this.focus();
+			this.setSelectionRange(start, end);
+		}else if(this.createTextRange) {
+			var range = this.createTextRange();
+			range.collapse(true);
+			range.moveEnd('character', end);
+			range.moveStart('character', start);
+			range.select();
+		}
+	});
+};
 </script>
 </html>

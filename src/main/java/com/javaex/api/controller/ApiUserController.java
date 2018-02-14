@@ -20,12 +20,8 @@ public class ApiUserController {
 	@RequestMapping(value="/api/join",method=RequestMethod.POST)
 	public int join(@RequestParam("id") String id) {
 		System.out.println("/api/join");
-		if(id.equals("")) { //아무것도 입력하지 않았을시
-			System.out.println("id:"+id);
-		}
 		
 		int fail = userservice.getid(id);
-		
 		
 		return fail;
 	}

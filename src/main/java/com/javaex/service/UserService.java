@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.javaex.dao.UserDao;
+import com.javaex.vo.UserVo;
 
 @Service
 public class UserService {
@@ -11,7 +12,7 @@ public class UserService {
 	@Autowired
 	private UserDao userdao;
 	
-	public int getid(String id) {
+	public int getid(String id) { // api service
 		System.out.println("userservice");
 		int fail = 2;
 		String return_id = userdao.selectIdById(id);
@@ -23,6 +24,18 @@ public class UserService {
 		}
 		
 		return fail;
+	}
+	
+	public void storeUserInfo(UserVo uservo) {
+		
+		userdao.insertUserVo(uservo);
+	}
+	
+	public UserVo loginUser(UserVo uservo) {
+		
+		UserVo authUser = userdao.selectUserVo(uservo);
+		
+		return authUser;
 	}
 	
 }
