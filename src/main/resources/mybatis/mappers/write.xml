@@ -21,7 +21,7 @@
 			      ,c.userNo
 			      ,c.cateName
 			      ,c.description
-			      ,p.regDate
+			      ,to_char(p.regDate,'yyyy"년"mm"월"dd"일"hh"시"mi"분"') regDate
 			      ,p.postNo
 			      ,p.postTitle
 			      ,p.postContent
@@ -38,7 +38,7 @@
 			      ,cateNo
 			      ,postTitle
 			      ,postContent
-			      ,regDate
+			      ,to_char(regDate,'yyyy"년"mm"월"dd"일"hh"시"mi"분"') regDate
 			from (
 			        select postNo
 			              ,cateNo
@@ -53,13 +53,15 @@
 	</select>
 	
 	<select id="selectPostByPostNo" parameterType="int" resultType="WriteVo">
-		select postNo
-		      ,cateNo
-		      ,postTitle
-		      ,postContent
-		      ,regDate
-		from post
-		where postNo = #{postno}
+		<![CDATA[
+			select postNo
+			      ,cateNo
+			      ,postTitle
+			      ,postContent
+			      ,to_char(regDate,'yyyy"년"mm"월"dd"일"hh"시"mi"분"') regDate
+			from post
+			where postNo = #{postno}
+		]]>
 	</select>
 	
 </mapper>

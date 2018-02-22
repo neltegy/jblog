@@ -118,7 +118,7 @@ function render(cateVo , updown){
 	str += "<tr>";
 	str +=	"<td>"+cateVo.cateNo+"</td>";
 	str +=	"<td>"+cateVo.cateName+"</td>";
-	str +=	"<td>"+"</td>";
+	str +=	"<td>"+cateVo.count+"</td>";
 	str +=	"<td>"+cateVo.description+"</td>";
 	str +=	"<td><img src='/jblog/assets/images/delete.jpg'></td>";
 	str += "</tr>";

@@ -6,19 +6,21 @@ public class CategoryVo {
 	private String cateName;
 	private String description;
 	private String regDate;
+	private int count;
 	
 	public CategoryVo() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
-	public CategoryVo(int cateNo, int userNo, String cateName, String description, String regDate) {
+	public CategoryVo(int cateNo, int userNo, String cateName, String description, String regDate, int count) {
 		super();
 		this.cateNo = cateNo;
 		this.userNo = userNo;
 		this.cateName = cateName;
 		this.description = description;
 		this.regDate = regDate;
+		this.count = count;
 	}
 	
 	public int getCateNo() {
@@ -51,12 +53,20 @@ public class CategoryVo {
 	public void setRegDate(String regDate) {
 		this.regDate = regDate;
 	}
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
 	
 	@Override
 	public String toString() {
 		return "CategoryVo [cateNo=" + cateNo + ", userNo=" + userNo + ", cateName=" + cateName + ", description="
-				+ description + ", regDate=" + regDate + "]";
+				+ description + ", regDate=" + regDate + ", count=" + count + "]";
 	}
+	
+	
 	
 	
 }

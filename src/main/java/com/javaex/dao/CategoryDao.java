@@ -40,4 +40,5 @@ public class CategoryDao {
 		// TODO Auto-generated method stub
 		return sqlsession.selectOne("category.selectCategoryVoOneByNoAndName", map);
 	}
+	
 }

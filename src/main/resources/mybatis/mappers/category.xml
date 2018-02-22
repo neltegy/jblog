@@ -17,13 +17,16 @@
 	
 	<select id="selectCategoryVo" parameterType="int" resultType="CategoryVo">
 		<![CDATA[
-			select cateNo
-			      ,userNo
+			select count(postTitle) count
 			      ,cateName
 			      ,description
-			      ,regdate
-			from category
-			where userNo = #{no}
+			      ,c.cateNo cateNo
+			from category c,post p
+			where c.cateNo = p.cateNo(+)
+			  and userNo = #{no}
+			group by cateName
+			        ,description
+			        ,c.cateNo
 		]]>
 	</select>
 	
@@ -63,5 +66,6 @@
 			  and cateName = #{catename}
 		]]>
 	</select>
+	
 	
 </mapper>

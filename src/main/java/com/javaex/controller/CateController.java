@@ -60,6 +60,7 @@ public class CateController {
 		
 		List<CategoryVo> cateList= categoryservice.getCategoryInfo(no);
 		
+		//전체카테고리리스에서 글이있는 카테고리 리스트랑 비교해서 cateName이 같다면 글이있는카테고리리스트의 count값을 전체카테고리 리스트의 count에 셋해준다.
 		return cateList;
 	}
 	
@@ -77,7 +78,6 @@ public class CateController {
 		categoryservice.categoryStore(categoryvo);
 		//select
 		CategoryVo return_categoryvo = categoryservice.getCategoryInfoOne(categoryvo.getCateNo());
-		
 		
 		return return_categoryvo;
 	}
