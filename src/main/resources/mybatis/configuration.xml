@@ -3,9 +3,17 @@
 <configuration>
 	<typeAliases>
 		<typeAlias alias="UserVo" type="com.javaex.vo.UserVo"/>
+		<typeAlias alias="BlogVo" type="com.javaex.vo.BlogVo"/>
+		<typeAlias alias="CategoryVo" type="com.javaex.vo.CategoryVo"/>
+		<typeAlias alias="FileUploadVo" type="com.javaex.vo.FileUploadVo"/>
+		<typeAlias alias="WriteVo" type="com.javaex.vo.WriteVo"/>
 	</typeAliases>
 	
 	<mappers>
 		<mapper resource="mybatis/mappers/user.xml" />
+		<mapper resource="mybatis/mappers/blog.xml" />
+		<mapper resource="mybatis/mappers/category.xml" />
+		<mapper resource="mybatis/mappers/fileupload.xml" />
+		<mapper resource="mybatis/mappers/write.xml" />
 	</mappers>
 </configuration>

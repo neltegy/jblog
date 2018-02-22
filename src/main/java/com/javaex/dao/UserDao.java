@@ -27,4 +27,8 @@ public class UserDao {
 		return sqlsession.selectOne("user.selectUserVoByIdPassword", uservo);
 	}
 	
+	public UserVo selectUserVoById(String id) {
+		
+		return sqlsession.selectOne("user.selectUserVoById", id);
+	}
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="fileupload">
+	
+	<insert id="insertFileInfo" parameterType="FileUploadVo">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select seq_uploadedfile_no.nextval 
+	    	from dual
+		</selectKey>
+		<![CDATA[
+			insert into uploadedfile
+			values( #{no}
+			       ,#{orgname}
+			       ,#{exname}
+			       ,#{savename}
+			       ,#{filepath} 
+			       ,#{filesize}
+			       ,sysdate
+			)
+		]]>
+	</insert>
+	
+	<select id="selectFileInfoByNo" parameterType="int" resultType="FileUploadVo">
+		<![CDATA[
+			select no
+			      ,orgname
+			      ,exname
+			      ,savename
+			      ,filepath
+			      ,filesize
+			      ,to_char(reg_date,'yyyy"년"mm"월"dd"일"hh"시"mi"분"') reg_date
+			from uploadedfile
+			where no = #{no}
+		]]>
+	</select>
+	
+	<select id="selectListOfFile" resultType="FileUploadVo">
+		<![CDATA[
+			select no
+			      ,orgname
+			      ,exname
+			      ,savename
+			      ,filepath
+			      ,filesize
+			      ,to_char(reg_date,'yyyy"년"mm"월"dd"일"hh"시"mi"분"') reg_date
+			from uploadedfile
+			order by reg_date desc
+		]]>
+	</select>
+	
+</mapper>

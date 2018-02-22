@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>JBlog</title>
 <link rel="stylesheet" href="/jblog/assets/css/jblog.css">
+<script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.12.4.js"></script>
 </head>
 <body>
 
@@ -13,15 +14,19 @@
 		
 		<!-- 블로그 해더 -->
 		<div id="header">
-			<h1>블로그타이틀 출력해야함</h1>
+			<h1 id="header-title"><a href="${pageContext.request.contextPath}/${authUser.id}">${blogVo.blogTitle}</a></h1>
 			<ul>
-				<!-- 로그인 전 메뉴 -->
-				<li><a href="">로그인</a></li>
-					
-					
-				<!-- 로그인 후 메뉴 -->
-				<li><a href="">로그아웃</a></li>
-				<li><a href="">내블로그 관리</a></li>
+				<c:choose>
+					<c:when test="${authUser == null }">
+					<!-- 로그인 전 메뉴 -->
+					<li><a href="${pageContext.request.contextPath}/user/login">로그인</a></li>
+					</c:when>
+					<c:otherwise>	
+					<!-- 로그인 후 메뉴 -->
+					<li><a href="${pageContext.request.contextPath}/user/logout">로그아웃</a></li>
+					<li><a href="${pageContext.request.contextPath}/${authUser.id}/admin/basic">내블로그 관리</a></li>
+					</c:otherwise>
+				</c:choose>
 			</ul>
 		</div>
 		<!-- /블로그 해더 -->
@@ -30,9 +35,9 @@
 		<div id="wrapper">
 			<div id="content" class="full-screen">
 				<ul class="admin-menu">
-					<li><a href="">기본설정</a></li>
-					<li class="selected"><a href="">카테고리</a></li>
-					<li><a href="">글작성</a></li>
+					<li><a href="${pageContext.request.contextPath}/${authUser.id}/admin/basic">기본설정</a></li>
+					<li class="selected"><a href="${pageContext.request.contextPath}/${authUser.id}/admin/category">카테고리</a></li>
+					<li><a href="${pageContext.request.contextPath}/${authUser.id}/admin/write">글작성</a></li>
 				</ul>
 				
 		      	<table class="admin-cat">
@@ -43,27 +48,7 @@
 		      			<th>설명</th>
 		      			<th>삭제</th>      			
 		      		</tr>
-					<tr>
-						<td>3</td>
-						<td>미분류</td>
-						<td>10</td>
-						<td>카테고리를 지정하지 않은 경우</td>
-						<td><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>
-					</tr>  
-					<tr>
-						<td>2</td>
-						<td>스프링 스터디</td>
-						<td>20</td>
-						<td>어쩌구 저쩌구</td>
-						<td><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>스프링 프로젝트</td>
-						<td>15</td>
-						<td>어쩌구 저쩌구</td>
-						<td><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>
-					</tr>					  
+										  
 				</table>
       	
       			<h4 class="n-c">새로운 카테고리 추가</h4>
@@ -80,7 +65,7 @@
 		      			<td class="s">&nbsp;</td>
 		      			<td><input type="submit" value="카테고리 추가"></td>
 		      		</tr>      		      		
-		      	</table> 
+		      	</table>
 			</div>
 		</div>
 
@@ -94,4 +79,91 @@
 		
 	</div>
 </body>
+<script type="text/javascript">
+var page = 1;
+$(document).ready(function(){
+	
+	conajax();
+});
+
+function conajax(){
+	$.ajax({
+		url : "${pageContext.request.contextPath }/excutionList/admin/category",
+		type : "post",
+		/* contentType : "application/json",
+		data : JSON.stringify(cate), */
+		data : {page: page},
+		
+		dataType : "json",
+		success : function(cateList){
+			/*성공시 처리해야될 코드 작성*/
+			console.log(cateList);
+			
+			for(var i = 0 ; i < cateList.length; i++){
+				render(cateList[i],"down");
+			}
+			
+		},
+		
+		error : function(XHR, status, error) {
+			console.error(status + " : " + error);
+		}
+
+	});
+};
+
+function render(cateVo , updown){
+	var str = "";
+	
+	str += "<tr>";
+	str +=	"<td>"+cateVo.cateNo+"</td>";
+	str +=	"<td>"+cateVo.cateName+"</td>";
+	str +=	"<td>"+"</td>";
+	str +=	"<td>"+cateVo.description+"</td>";
+	str +=	"<td><img src='/jblog/assets/images/delete.jpg'></td>";
+	str += "</tr>";
+	
+	if(updown == "up"){
+		$(".admin-cat").prepend(str);
+	}else if(updown == "down"){
+		$(".admin-cat").append(str);
+	}else{
+		console.log("updown 오류");
+	}
+	
+	
+};
+
+$("[type=submit]").on("click",function(){
+	//ajax로 방금 보낸데이터로 받아서 up으로해서 추가한다.
+	var cateName = $("[name=name]").val();
+	var description = $("[name=desc]").val();
+	
+	$("[name=name]").val("");
+	$("[name=desc]").val("");
+	
+	var cateVo = {
+		cateName: cateName,
+		description: description,
+	}
+	
+	$.ajax({
+		url : "${pageContext.request.contextPath }/excutionAdd/admin/category",
+		type : "post",
+		contentType : "application/json",
+		data : JSON.stringify(cateVo),
+		
+		dataType : "json",
+		success : function(return_categoryvo){
+			/*성공시 처리해야될 코드 작성*/
+			render(return_categoryvo,"down");
+		},
+		
+		error : function(XHR, status, error) {
+			console.error(status + " : " + error);
+		}
+
+	});
+});
+</script>
 </html>

@@ -12,4 +12,5 @@ public class MainController {
 		System.out.println("hello world");
 		return "main/index";
 	}
+	
 }

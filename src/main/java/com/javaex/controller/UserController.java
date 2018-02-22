@@ -46,7 +46,14 @@ public class UserController {
 		UserVo authUser = userservice.loginUser(uservo);
 		session.setAttribute("authUser", authUser);
 		
-		return "blog/blog-main";
+		return "redirect:/";
+	}
+	
+	@RequestMapping(value="/logout",method=RequestMethod.GET)
+	public String logout(HttpSession session) {
+		System.out.println("/logout");
+		session.removeAttribute("authUser");
+		return "redirect:/";
 	}
 	
 }

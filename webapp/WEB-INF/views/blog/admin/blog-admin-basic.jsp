@@ -1,4 +1,5 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html>
 <html>
@@ -6,6 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>JBlog</title>
 <link rel="stylesheet" href="/jblog/assets/css/jblog.css">
+<script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.12.4.js"></script>
 </head>
 <body>
 
@@ -13,15 +15,19 @@
 		
 		<!-- 블로그 해더 -->
 		<div id="header">
-			<h1>블로그타이틀 출력해야함</h1>
+			<h1 id="header-title"><a href="${pageContext.request.contextPath}/${authUser.id}">${blogVo.blogTitle}</a></h1>
 			<ul>
-				<!-- 로그인 전 메뉴 -->
-				<li><a href="">로그인</a></li>
-					
-					
-				<!-- 로그인 후 메뉴 -->
-				<li><a href="">로그아웃</a></li>
-				<li><a href="">내블로그 관리</a></li>
+				<c:choose>
+					<c:when test="${authUser == null }">
+					<!-- 로그인 전 메뉴 -->
+					<li><a href="${pageContext.request.contextPath}/user/login">로그인</a></li>
+					</c:when>
+					<c:otherwise>	
+					<!-- 로그인 후 메뉴 -->
+					<li><a href="${pageContext.request.contextPath}/user/logout">로그아웃</a></li>
+					<li><a href="${pageContext.request.contextPath}/${authUser.id}/admin/basic">내블로그 관리</a></li>
+					</c:otherwise>
+				</c:choose>
 			</ul>
 		</div>
 		<!-- /블로그 해더 -->
@@ -30,20 +36,20 @@
 		<div id="wrapper">
 			<div id="content" class="full-screen">
 				<ul class="admin-menu">
-					<li class="selected"><a href="">기본설정</a></li>
-					<li><a href="">카테고리</a></li>
-					<li><a href="">글작성</a></li>
+					<li class="selected"><a href="${pageContext.request.contextPath}/${authUser.id}/admin/basic">기본설정</a></li>
+					<li><a href="${pageContext.request.contextPath}/${authUser.id}/admin/category">카테고리</a></li>
+					<li><a href="${pageContext.request.contextPath}/${authUser.id}/admin/write">글작성</a></li>
 				</ul>
 				
-				<form action="" method="post">
+				<form action="${pageContext.request.contextPath }/${authUser.id}/admin/basicexcution" method="post" enctype="multipart/form-data">
 	 		      	<table class="admin-config">
 			      		<tr>
 			      			<td class="t">블로그 제목</td>
-			      			<td><input type="text" size="40" name="title"></td>
+			      			<td><input type="text" size="40" name="title" value="${blogVo.blogTitle}"></td>
 			      		</tr>
 			      		<tr>
 			      			<td class="t">로고이미지</td>
-			      			<td><img src="/jblog/assets/images/spring-logo.jpg"></td>      			
+			      			<td><img src="${blogVo.logoFile }"></td> <!--  -->      			
 			      		</tr>      		
 			      		<tr>
 			      			<td class="t">&nbsp;</td>

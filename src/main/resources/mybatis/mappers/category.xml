@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="category">
+	
+	<insert id="insertCategoryVo" parameterType="UserVo">
+		<![CDATA[
+			insert into category
+			values(seq_category_no.nextval
+			      ,#{userNo}
+			      ,'미분류'
+                  ,'기본으로 만들어지는 카테고리 입니다.'
+                  ,sysdate
+			)
+		]]>
+	</insert>
+	
+	<select id="selectCategoryVo" parameterType="int" resultType="CategoryVo">
+		<![CDATA[
+			select cateNo
+			      ,userNo
+			      ,cateName
+			      ,description
+			      ,regdate
+			from category
+			where userNo = #{no}
+		]]>
+	</select>
+	
+	<insert id="insertBasicCategoryVo" parameterType="CategoryVo">
+		<selectKey keyProperty="cateNo" resultType="int" order="BEFORE">
+	    	select seq_category_no.nextval
+	    	from dual
+	    </selectKey>
+		<![CDATA[
+			insert into category
+			values(#{cateNo}
+			      ,#{userNo}
+			      ,#{cateName}
+                  ,#{description}
+                  ,sysdate
+			)
+		]]>
+	</insert>
+	
+	<select id="selectCategoryVoOneByNo" parameterType="int" resultType="CategoryVo">
+		<![CDATA[
+			select cateNo
+			      ,userNo
+			      ,cateName
+			      ,description
+			      ,regdate
+			from category
+			where cateNo = #{no}
+		]]>
+	</select>
+	
+	<select id="selectCategoryVoOneByNoAndName" parameterType="map" resultType="int">
+		<![CDATA[
+			select cateNo
+			from category
+			where userNo = #{userno}
+			  and cateName = #{catename}
+		]]>
+	</select>
+	
+</mapper>

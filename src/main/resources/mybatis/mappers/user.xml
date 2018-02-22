@@ -12,9 +12,13 @@
 	</select><!-- 안에 if문이 있을때 String 형 하나만 받을시에 _parameter -->
 	
 	<insert id="insertUserVo" parameterType="UserVo">
+		<selectKey keyProperty="userNo" resultType="int" order="BEFORE">
+			select seq_users_no.nextval
+	    	from dual
+		</selectKey>
 		<![CDATA[
 			insert into users
-			values(seq_users_no.nextval
+			values(#{userNo}
 			      ,#{id}
 			      ,#{userName}
 			      ,#{password}
@@ -22,6 +26,7 @@
 			)
 		]]>
 	</insert>
+	
 	
 	<select id="selectUserVoByIdPassword" parameterType="UserVo" resultType="UserVo">
 		<![CDATA[
@@ -33,47 +38,11 @@
 		]]>
 	</select>
 	
-	
-	<insert id="insertUser" parameterType="com.javaex.vo.UserVo">
+	<select id="selectUserVoById" parameterType="String" resultType="UserVo">
 		<![CDATA[
-			insert into users
-			values( seq_users_no.nextval
-			       ,#{name}
-			       ,#{email}
-			       ,#{password}
-			       ,#{gender})
-		]]>
-	</insert>
-	
-	<select id="selectUserByNo" parameterType="int" resultType="com.javaex.vo.UserVo">
-		<![CDATA[
-			select name
-			      ,email
-			      ,password
-			      ,gender
+			select userNo
 			from users
-			where no = #{no}
-		]]>
-	</select>
-	
-	<update id="insertUserByNamePasswordGenderNo" parameterType="com.javaex.vo.UserVo">
-		<![CDATA[
-			update users set 
-					name = #{name},
-					password = #{password},
-					gender = #{gender}
-					where no = #{no}
-		]]>
-	</update>
-	
-	<select id="selectUserByEmail" parameterType="String" resultType="UserVo">
-		<![CDATA[
-			select no
-				  ,name
-			      ,email
-			      ,gender
-			from users
-			where email = #{email}
+			where id = #{id}
 		]]>
 	</select>
 	
