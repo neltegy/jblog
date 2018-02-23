@@ -81,4 +81,11 @@ public class CateController {
 		
 		return return_categoryvo;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value="/delete/admin/category",method=RequestMethod.POST)
+	public String cateDelete(@RequestParam("cateno") int cateno) {
+		categoryservice.removeCategoryVo(cateno);
+		return "삭제되었습니다.";
+	}
 }

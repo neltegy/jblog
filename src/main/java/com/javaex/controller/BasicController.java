@@ -66,14 +66,14 @@ public class BasicController {
 		int auth_no = authUser.getUserNo();
 		
 		if(file.isEmpty() ) {
+			basicservice.updateTitle(title,auth_no);
 			return "redirect:/"+authUser.getId()+"/admin/basic";
 		}else {
 			basicservice.updateTitle(title,auth_no);
+			basicservice.filerestore(file,auth_no);
+			return "redirect:/"+authUser.getId()+"/admin/basic";
 		}
 		
-		basicservice.filerestore(file,auth_no);
-		
-		return "redirect:/"+authUser.getId()+"/admin/basic";
 	}
 	
 }

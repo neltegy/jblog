@@ -41,4 +41,9 @@ public class CategoryDao {
 		return sqlsession.selectOne("category.selectCategoryVoOneByNoAndName", map);
 	}
 	
+	public void deleteCategoryVoByCateNo(int cateno) {
+		
+		sqlsession.delete("category.deleteCategoryVoByCateNo", cateno);
+	}
+	
 }

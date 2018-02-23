@@ -21,12 +21,15 @@
 			      ,cateName
 			      ,description
 			      ,c.cateNo cateNo
+			      ,c.regDate regDate
 			from category c,post p
 			where c.cateNo = p.cateNo(+)
 			  and userNo = #{no}
 			group by cateName
 			        ,description
 			        ,c.cateNo
+			        ,c.regDate
+			order by regDate desc
 		]]>
 	</select>
 	
@@ -66,6 +69,15 @@
 			  and cateName = #{catename}
 		]]>
 	</select>
+	
+	<delete id="deleteCategoryVoByCateNo" parameterType="int">
+		<![CDATA[
+			delete from category
+			where cateNo = #{cateno}
+		]]>
+	</delete>
+	
+	
 	
 	
 </mapper>

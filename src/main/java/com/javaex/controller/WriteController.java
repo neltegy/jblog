@@ -73,6 +73,6 @@ public class WriteController {
 		// post테이블에 저장시킨다.
 		writeservice.postStore(writevo);
 		
-		return "redirect:/"+authuser.getId();
+		return "redirect:/"+authuser.getId()+"/admin/write";
 	}
 }

@@ -48,9 +48,9 @@
 		      			<th>설명</th>
 		      			<th>삭제</th>      			
 		      		</tr>
-										  
+					
 				</table>
-      	
+      			
       			<h4 class="n-c">새로운 카테고리 추가</h4>
 		      	<table id="admin-cat-add">
 		      		<tr>
@@ -115,12 +115,12 @@ function conajax(){
 function render(cateVo , updown){
 	var str = "";
 	
-	str += "<tr>";
+	str += "<tr id='"+cateVo.cateNo+"'>";
 	str +=	"<td>"+cateVo.cateNo+"</td>";
 	str +=	"<td>"+cateVo.cateName+"</td>";
 	str +=	"<td>"+cateVo.count+"</td>";
 	str +=	"<td>"+cateVo.description+"</td>";
-	str +=	"<td><img src='/jblog/assets/images/delete.jpg'></td>";
+	str +=	"<td><input class='delete_test' type='image' src='/jblog/assets/images/delete.jpg' data-count="+cateVo.count+" data-cateno="+cateVo.cateNo+"></td>";
 	str += "</tr>";
 	
 	if(updown == "up"){
@@ -131,8 +131,40 @@ function render(cateVo , updown){
 		console.log("updown 오류");
 	}
 	
-	
 };
+
+$(".admin-cat").on("click",".delete_test",function(){
+	var count = $(this).data("count");
+	var cateno = $(this).data("cateno");
+	
+	if(count != 0){
+		alert('글이 있어서 삭제할수 없습니다.');
+	}else{
+		/* 태그 remove() */
+		$("#"+cateno).remove(); 
+		/* 아작스로  실제 db삭제 */
+		$.ajax({
+			url : "${pageContext.request.contextPath }/delete/admin/category",
+			type : "post",
+			/* contentType : "application/json",
+			data : JSON.stringify(cate), */
+			data : {cateno: cateno},
+			
+			dataType : "json",
+			success : function(str){
+				/*성공시 처리해야될 코드 작성*/
+				console.log(str);
+				
+			},
+			
+			error : function(XHR, status, error) {
+				console.error(status + " : " + error);
+			}
+
+		});
+	}
+	
+});
 
 $("[type=submit]").on("click",function(){
 	//ajax로 방금 보낸데이터로 받아서 up으로해서 추가한다.

@@ -37,4 +37,9 @@ public class CategoryService {
 		map.put("userno", userno);
 		return categorydao.selectCategoryVoOne(map);
 	}
+	
+	public void removeCategoryVo(int cateno) {
+		
+		categorydao.deleteCategoryVoByCateNo(cateno);
+	}
 }

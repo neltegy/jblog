@@ -51,6 +51,9 @@
 						<c:choose>
 							<c:when test="${WriteVo == null }">
 								${listOfWriteVo[0].postContent }
+								<c:if test="${listOfWriteVo[0].postContent == null }">
+									등록된 글이 없습니다.
+								</c:if>
 							</c:when>
 							<c:otherwise>
 								${WriteVo.postContent }
